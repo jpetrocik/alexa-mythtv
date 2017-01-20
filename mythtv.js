@@ -18,7 +18,7 @@ function MythTv() {
 
 		console.log(url);
 
-		return http.request(options, function(response) {
+		var req = http.request(options, function(response) {
 			var body = '';
 			response.on('data', function(d) {
 				body += d;
@@ -32,6 +32,9 @@ function MythTv() {
 				}
 			});
 		});
+		req.end();
+
+		return req;
 	};
 
 	this.stop = function(callback) {
