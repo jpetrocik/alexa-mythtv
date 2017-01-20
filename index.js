@@ -1,7 +1,7 @@
 var alexa = require('alexa-app');
 var MythTv = require('./mythtv');
 
-module.change_code = 1;
+//module.change_code = 1;
 
 var mythtv = new MythTv();
 var mythtvApp = new alexa.app('mythtv');
@@ -82,7 +82,7 @@ mythtvApp.intent('listings',
 			var listingResponse = "Here is what is on tonight. ";
 			var total = 0;
 			results.ProgramList.Programs.forEach(function(program, index){
-				if (program.Category == "News" || total > 5) {
+				if (program.Category == "News" || total > 8) {
 					return;
 				}
 				listingResponse += program.Title + ". "
