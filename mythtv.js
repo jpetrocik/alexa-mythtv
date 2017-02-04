@@ -60,13 +60,11 @@ function MythTv() {
 	};
 
 	this.start = function(show, callback) {
-		console.log("Playing " + show);
+		console.log("Searching for " + show);
 
 		this.recordedListing(function(statusCode, showListings) {
 			if (statusCode == 200) {
 				var bestMatch = didYouMean(show.toLowerCase(), showListings.ProgramList.Programs, { matchPath: "Title"});
-				console.log(bestMatch);
-
 				if (bestMatch == null) {
 					callback(false);
 					return;
