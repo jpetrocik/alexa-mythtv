@@ -1,4 +1,5 @@
 var http = require('http');
+const didYouMean = require('didyoumean2')
 
 function MythTv() {
 	var frontendIp = "192.168.1.11",
@@ -58,33 +59,26 @@ function MythTv() {
 		});
 	};
 
-	this.savePosition = function() {
-
-	};
-
 	this.start = function(show, callback) {
 		console.log("Playing " + show);
 
-		this.recordedListing(function(statusCode, results) {
-
+		this.recordedListing(function(statusCode, showListings) {
 			if (statusCode == 200) {
+				var bestMatch = didYouMean(show.toLowerCase(), showListings.ProgramList.Programs, { matchPath: "Title"});
+				console.log(bestMatch);
 
-				var foundMatch = results.ProgramList.Programs.some(function(program, index){
-					if ( program.Title.toLowerCase() === show.toLowerCase()) {
-						console.log("Starting " + program.Title);
-						sendRequest("POST", "/Frontend/PlayRecording?ChanId=" + program.Channel.ChanId + "&StartTime=" + program.StartTime, 6547, 
-							function(statusCode, results) {
-								callback(statusCode === 200);
-							}
-						);
-						return true;
-					}
-				});
-
-				//no match found
-				if (!foundMatch)
+				if (bestMatch == null) {
 					callback(false);
+					return;
+				}
 
+				console.log("Starting " + bestMatch.Title);
+
+				sendRequest("POST", "/Frontend/PlayRecording?ChanId=" + bestMatch.Channel.ChanId + "&StartTime=" + bestMatch.StartTime, 6547, 
+					function(statusCode, results) {
+						callback(statusCode === 200, bestMatch.Title);
+					}
+				);
 			} else {
 				callback(false);
 			}
@@ -95,6 +89,7 @@ function MythTv() {
 		console.log("Retrieving record shows");
 		sendRequest("GET", "/Dvr/GetRecordedList?StartIndex=1&Count=100&Descending=true", 6544, callback);
 	}
+
 }
 
 module.exports = MythTv;

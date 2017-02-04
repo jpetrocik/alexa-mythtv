@@ -31,8 +31,8 @@ mythtvApp.intent('play',
 	},
 	function(request,response) {
 		var show = request.slot('show');
-		mythtv.start(show, function(status) {
-			handleResponse(status, response, "Playing " + show, "Sorry I was unable to play " + show );
+		mythtv.start(show, function(status, matchedShow) {
+			handleResponse(status, response, "Playing " + matchedShow, "Sorry I was unable to play " + show );
 		});
 		return false;
 	}
