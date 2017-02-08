@@ -99,12 +99,21 @@ mythtvApp.intent('listings',
 );
 
 
-mythtvApp.intent('savePosition',
+mythtvApp.intent('AMAZON.StopIntent',
 	{
-	"utterances":[ "save position" ]
+	"utterances":[ "no words to discribe" ]
 	},
 	function(request,response) {
-		response.say("Position saved for later play back");
+		response.say("");
+	}
+);
+
+mythtvApp.intent('AMAZON.HelpIntent',
+	{
+	"utterances":[ "help" ]
+	},
+	function(request,response) {
+		response.say("You may ask me to play something or I can tell you whats on TV tonight");
 	}
 );
 
